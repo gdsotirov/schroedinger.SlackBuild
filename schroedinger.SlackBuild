@@ -1,14 +1,29 @@
 #!/bin/sh
 #
-# SlackBuild for Schroedinger
-# Written by Georgi D. Sotirov <gdsotirov@dir.bg>
-# Visit SlackPack at http://sotirov-bg.net/slackpack/
+# Slackware build script for Schroedinger
+# Copyright (C) 2010,2012 Georgi D. Sotirov <gdsotirov@dir.bg>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+# $Id: schroedinger.SlackBuild,v 1.3 2012/08/30 18:38:21 gsotirov Exp $
 #
 
-. ../slack-package.conf
+. ../../slack-package.conf
 
 NAME=schroedinger
-VERSION=1.0.10
+VERSION=1.0.11
 BUILD=${BUILD:-1}
 ARCH=${ARCH:-i486}
 
@@ -34,7 +49,7 @@ mkdir -p $PKG
 
 # Extract the source
 cd $TMP
-tar -xvf $CWD/$NAME-$VERSION.tar.gz || exit 1
+tar -xvf $CWD/$NAME-$VERSION.tar.?z* || exit 3
 cd $SRC fix_source
 
 # Configure
@@ -44,13 +59,14 @@ CXXFLAGS=$SLKCFLAGS \
             --host=$ARCH-slackware-linux \
             --prefix=/usr \
             --sysconfdir=/etc \
+            --libdir=/usr/lib${LIBDIRSUFFIX} \
             --localstatedir=/var \
             --enable-shared=yes \
-            --enable-static=no || exit 2
+            --enable-static=no || exit 4
 
 # Build & install
-make -j4 || exit 3 
-make DESTDIR=$PKG install || exit 3
+make -j4 || exit 5
+make DESTDIR=$PKG install || exit 6
 
 # Prepare
 ( cd $PKG; strip_lib )
